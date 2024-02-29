@@ -142,11 +142,11 @@ export const startPythonClient = async () => {
 
     updateUserConfiguration(`{
         "editor.fontSize": 14,
-        "workbench.colorTheme": "Default Dark Modern"
+        "workbench.colorTheme": "Default Dark Modern",
     }`);
 
     const fileSystemProvider = new RegisteredFileSystemProvider(false);
-    fileSystemProvider.registerFile(new RegisteredMemoryFile(vscode.Uri.file('/workspace/hello.py'), 'print("Hello, World!")'));
+    fileSystemProvider.registerFile(new RegisteredMemoryFile(vscode.Uri.file('/workspace/webscript.py'), 'from waylay.exceptions import WaylayError'));
     registerFileSystemOverlay(1, fileSystemProvider);
 
     const registerCommand = async (cmdName: string, handler: (...args: unknown[]) => void) => {
@@ -165,7 +165,7 @@ export const startPythonClient = async () => {
     });
 
     // use the file create before
-    const modelRef = await createModelReference(monaco.Uri.file('/workspace/hello.py'));
+    const modelRef = await createModelReference(monaco.Uri.file('/workspace/webscript.py'));
     modelRef.object.setLanguageId(languageId);
 
     // create monaco editor

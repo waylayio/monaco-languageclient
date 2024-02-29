@@ -38,15 +38,20 @@ export const launchLanguageServer = (runconfig: LanguageServerRunConfig, socket:
     const writer = new WebSocketMessageWriter(socket);
     const socketConnection = createConnection(reader, writer, () => socket.dispose());
     const serverConnection = createServerProcess(serverName, runCommand, runCommandArgs, spawnOptions);
+    const workspacePath = process.cwd() + '../../../workspace/';
     if (serverConnection) {
         forward(socketConnection, serverConnection, message => {
             if (Message.isRequest(message)) {
+                // replace the value file:///workspace/ from the message jsonrpc to the actual workspace path
                 console.log(`${serverName} Server received:`);
-                console.log(message);
                 if (message.method === InitializeRequest.type.method) {
                     const initializeParams = message.params as InitializeParams;
                     initializeParams.processId = process.pid;
+                    initializeParams.rootUri = `file://${workspacePath}`;
+                    initializeParams.rootPath = workspacePath;
+                    initializeParams.workspaceFolders = [{ name: 'workspace', uri: `file://${workspacePath}` }];
                 }
+                console.log(message);
             }
             if (Message.isResponse(message)) {
                 console.log(`${serverName} Server sent:`);

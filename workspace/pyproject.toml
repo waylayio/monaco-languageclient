@@ -1,0 +1,4 @@
+[tool.pyright]
+reportMissingTypeStubs = false
+reportMissingImports = true
+reportMissingModuleSource = false

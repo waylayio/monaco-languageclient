@@ -6,3 +6,7 @@ lib
 dist
 
 *.tsbuildinfo
+
+.venv
+
+waylay-py
